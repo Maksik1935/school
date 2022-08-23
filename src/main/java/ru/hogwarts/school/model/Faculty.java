@@ -1,17 +1,32 @@
 package ru.hogwarts.school.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
+@Entity
 public class Faculty {
 
+    @Id
+    @GeneratedValue
     private int id;
+
+    @Pattern(regexp = "^[a-zA-Z]+$")
     private String name;
+
+    @Pattern(regexp = "^[a-zA-Z]+$")
     private String colour;
 
     public Faculty(int id, String name, String colour) {
         this.id = id;
         this.name = name;
         this.colour = colour;
+    }
+
+    public Faculty() {
+
     }
 
     public int getId() {

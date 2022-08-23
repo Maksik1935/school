@@ -1,19 +1,37 @@
 package ru.hogwarts.school.model;
 
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
+
 import java.util.Objects;
 
+@Entity
 public class Student {
 
+    @Id
+    @GeneratedValue
     private long id;
-    private String name;
-    private int age;
-    private int faculty;
 
-    public Student(long id, String name, int age, int faculty) {
+    @Pattern(regexp = "^[a-zA-Z]+$")
+    private String name;
+
+    @Min(value = 10)
+    @Max(value = 25)
+    private int age;
+
+    public Student(long id, String name, int age) {
         this.id = id;
         this.name = name;
         this.age = age;
-        this.faculty = faculty;
+    }
+
+    public Student(){
+
     }
 
     public long getId() {
@@ -33,12 +51,6 @@ public class Student {
     }
     public void setAge(int age) {
         this.age = age;
-    }
-    public int getFaculty() {
-        return faculty;
-    }
-    public void setFaculty(int faculty) {
-        this.faculty = faculty;
     }
 
     @Override

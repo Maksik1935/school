@@ -1,14 +1,18 @@
 package ru.hogwarts.school.controller;
 
+import org.springdoc.api.ErrorMessage;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
+import javax.validation.Valid;
 import java.util.Set;
 
 @RestController
-@RequestMapping("student")
+@RequestMapping("/student")
 public class StudentController {
 
     private final StudentService studentService;
@@ -18,13 +22,13 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity createStudent(@RequestBody Student student) {
+    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
         Student createdStudent = studentService.addStudent(student);
         return ResponseEntity.ok(createdStudent);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity findStudent(@PathVariable long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Student> findStudent(@PathVariable long id) {
         Student student = studentService.findStudent(id);
         if (student == null) {
             return ResponseEntity.notFound().build();
@@ -33,25 +37,27 @@ public class StudentController {
     }
 
     @PutMapping
-    public ResponseEntity updateStudent(@RequestBody Student student) {
-        Student updatedStudent = studentService.updateStudent(student.getId(), student);
+    public ResponseEntity<Student> updateStudent(@Valid @RequestBody Student student) {
+        Student updatedStudent = studentService.updateStudent(student);
         return ResponseEntity.ok(updatedStudent);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity deleteStudent(@PathVariable long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Student> deleteStudent(@PathVariable long id) {
         if(!studentService.deleteStudent(id)) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("{age}")
-    public ResponseEntity getStudentsByAge(@PathVariable int age) {
-        Set<Student> filteredSet = studentService.getStudentsByAge(age);
-        if (filteredSet.size() == 0) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(filteredSet);
+    @GetMapping("/getByAge/{age}")
+    public ResponseEntity<Set<Student>> getStudentsByAge(@PathVariable int age) {
+        return ResponseEntity.ok(studentService.getStudentsByAge(age));
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorMessage> invalidValid () {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Incorrect student params"));
+    }
+
 }

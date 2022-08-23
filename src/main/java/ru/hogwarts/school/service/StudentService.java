@@ -1,60 +1,47 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
-import ru.hogwarts.school.exception.IncorrectStudentParametersException;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.StudentRepository;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class StudentService {
-    private final Map<Long, Student> students = new HashMap<>();
-    private long idCount;
 
-    /*public Student addStudent(Student student) {    // Вот эту абракадабру надо было написать? Серьезно? И так всю валюдацию?
-        student.setId(++idCount);
-        if (student.getAge() <= 10 || student.getAge() >= 30 ||
-        student.getName() == null || student.getName() == "" ||
-        student.getFaculty() <=0 || student.getFaculty() >= FacultyService.getIdCount()) {
-            throw new IncorrectStudentParametersException();
-        }
-        return students.put(idCount, student);
-    }*/
+    private final StudentRepository studentRepository;
+
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     public Student addStudent(Student student) {
-        student.setId(++idCount);
-        return students.put(idCount, student);
+        return studentRepository.save(student);
     }
 
 
     public Student findStudent(long id) {
-        return students.get(id);
+        Optional<Student> student = studentRepository.findById(id);
+        if(student.isEmpty()) {
+            return null;
+        }
+        return student.get();
     }
 
-    public Student updateStudent(long id, Student student) {
-        students.remove(id);
-        student.setId(id);
-        return students.put(id, student);
+    public Student updateStudent(Student student) {
+        return studentRepository.save(student);
     }
 
     public Set<Student> getStudentsByAge(int age) {
-        Set<Student> filteredSet = new HashSet();
-        for (Student s : students.values()) {
-            if (s.getAge() == age) {
-                filteredSet.add(s);
-            }
-        }
-        return filteredSet;
+        return studentRepository.findByAge(age);
     }
 
     public boolean deleteStudent(long id) {
-        if(students.containsKey(id)) {
-            students.remove(id);
+        if(studentRepository.findById(id).isPresent()) {
+            studentRepository.deleteById(id);
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 }

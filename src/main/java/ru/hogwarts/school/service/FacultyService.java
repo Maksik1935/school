@@ -2,51 +2,46 @@ package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.repository.FacultyRepository;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class FacultyService {
-    private final Map<Integer, Faculty> faculties = new HashMap<>();
-    private static int idCount;
+
+    private final FacultyRepository facultyRepository;
+
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
     public Faculty addFaculty(Faculty faculty) {
-        faculty.setId(++idCount);
-        return faculties.put(idCount, faculty);
+        return facultyRepository.save(faculty);
     }
 
     public Faculty findFaculty(int id) {
-        return faculties.get(id);
+        Optional<Faculty> faculty = facultyRepository.findById(id);
+        if(faculty.isEmpty()) {
+            return null;
+        }
+        return faculty.get();
     }
 
-    public Faculty updateFaculty(int id, Faculty faculty) {
-        faculties.remove(id);
-        faculty.setId(id);
-        return faculties.put(id, faculty);
+    public Faculty updateFaculty(Faculty faculty) {
+        return facultyRepository.save(faculty);
     }
 
     public boolean deleteFaculty(int id) {
-        if (faculties.containsKey(id)) {
-            faculties.remove(id);
+        if (facultyRepository.findById(id).isPresent()) {
+            facultyRepository.deleteById(id);
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public Set<Faculty> getFacultiesByColour(String colour) {
-        Set<Faculty> filteredSet = new HashSet<>();
-        for (Faculty f : faculties.values()) {
-            if (f.getColour() == colour) {
-                filteredSet.add(f);
-            }
-        }
-        return filteredSet;
-    }
-
-    public static int getIdCount() {
-        return idCount;
+        return facultyRepository.findByColour(colour);
     }
 }
