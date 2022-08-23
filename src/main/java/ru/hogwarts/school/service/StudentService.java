@@ -21,11 +21,7 @@ public class StudentService {
 
 
     public Student findStudent(long id) {
-        Optional<Student> student = studentRepository.findById(id);
-        if(student.isEmpty()) {
-            return null;
-        }
-        return student.get();
+        return studentRepository.findById(id).orElseThrow();
     }
 
     public Student updateStudent(Student student) {

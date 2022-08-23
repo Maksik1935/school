@@ -9,6 +9,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
 import javax.validation.Valid;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @RestController
@@ -58,6 +59,11 @@ public class StudentController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> invalidValid () {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Incorrect student params"));
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<ErrorMessage> elementNotFound () {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage("Element not Found"));
     }
 
 }

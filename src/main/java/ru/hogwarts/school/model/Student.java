@@ -17,7 +17,7 @@ public class Student {
     @GeneratedValue
     private long id;
 
-    @Pattern(regexp = "^[a-zA-Z]+$")
+    @Pattern(regexp = "^[A-z]+$")
     private String name;
 
     @Min(value = 10)

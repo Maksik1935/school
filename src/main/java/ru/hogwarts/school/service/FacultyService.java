@@ -21,11 +21,7 @@ public class FacultyService {
     }
 
     public Faculty findFaculty(int id) {
-        Optional<Faculty> faculty = facultyRepository.findById(id);
-        if(faculty.isEmpty()) {
-            return null;
-        }
-        return faculty.get();
+        return facultyRepository.findById(id).orElseThrow();
     }
 
     public Faculty updateFaculty(Faculty faculty) {

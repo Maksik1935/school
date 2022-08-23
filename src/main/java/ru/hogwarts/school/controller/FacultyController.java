@@ -9,6 +9,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.service.FacultyService;
 
 import javax.validation.Valid;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @RestController
@@ -57,5 +58,10 @@ public class FacultyController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> invalidValid() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Incorrect faculty params"));
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<ErrorMessage> notFoundElement () {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage("Element not found"));
     }
 }

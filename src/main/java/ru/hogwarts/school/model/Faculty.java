@@ -13,10 +13,10 @@ public class Faculty {
     @GeneratedValue
     private int id;
 
-    @Pattern(regexp = "^[a-zA-Z]+$")
+    @Pattern(regexp = "^[A-z]+$")
     private String name;
 
-    @Pattern(regexp = "^[a-zA-Z]+$")
+    @Pattern(regexp = "^[A-z]+$")
     private String colour;
 
     public Faculty(int id, String name, String colour) {
