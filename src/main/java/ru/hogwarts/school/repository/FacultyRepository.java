@@ -9,5 +9,7 @@ import java.util.Set;
 @Repository
 public interface FacultyRepository extends JpaRepository<Faculty, Integer> {
 
-    Set<Faculty> findByColour(String colour);
+    Set<Faculty> findAllByColour(String colour);
+    Set<Faculty> findAllByName(String name);
+    Set<Faculty> findAllByNameAndColour(String name, String colour);
 }

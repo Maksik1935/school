@@ -5,10 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -51,9 +53,19 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/getByAge/{age}")
-    public ResponseEntity<Set<Student>> getStudentsByAge(@PathVariable int age) {
-        return ResponseEntity.ok(studentService.getStudentsByAge(age));
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Student>> getAll() {
+        return ResponseEntity.ok(studentService.getAllStudents());
+    }
+
+    @GetMapping("/getByAge/")
+    public ResponseEntity<Set<Student>> getStudentByAge(@RequestParam int min, @RequestParam int max) {
+        return ResponseEntity.ok(studentService.getStudentDyAge(min, max));
+    }
+
+    @GetMapping("/getStudentsFaculty/")
+    public ResponseEntity<Faculty> getStudentFaculty(long id) {
+        return ResponseEntity.ok(studentService.getStudentsFaculty(id));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

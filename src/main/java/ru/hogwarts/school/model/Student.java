@@ -1,9 +1,7 @@
 package ru.hogwarts.school.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
@@ -14,7 +12,7 @@ import java.util.Objects;
 public class Student {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue // А можем ли мы заставить замещать удаленные айдишники, а не продолжать счетчик? Или только вручную?
     private long id;
 
     @Pattern(regexp = "^[A-z]+$")
@@ -23,6 +21,10 @@ public class Student {
     @Min(value = 10)
     @Max(value = 25)
     private int age;
+
+    @ManyToOne
+    @JoinColumn(name = "faculty_id")
+    private Faculty faculty; //А как нам его записать не вручную в таблицу, а через метод контроллера? Наличие факультета в конструкторе игнориуется Спрингом.
 
     public Student(long id, String name, int age) {
         this.id = id;
@@ -51,6 +53,13 @@ public class Student {
     }
     public void setAge(int age) {
         this.age = age;
+    }
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
     }
 
     @Override

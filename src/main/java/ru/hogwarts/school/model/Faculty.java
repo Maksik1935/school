@@ -1,10 +1,10 @@
 package ru.hogwarts.school.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Faculty {
@@ -18,6 +18,9 @@ public class Faculty {
 
     @Pattern(regexp = "^[A-z]+$")
     private String colour;
+
+    @OneToMany(mappedBy = "faculty")
+    private Set<Student> students;
 
     public Faculty(int id, String name, String colour) {
         this.id = id;
@@ -47,6 +50,11 @@ public class Faculty {
     public void setColour(String colour) {
         this.colour = colour;
     }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
 
     @Override
     public boolean equals(Object o) {

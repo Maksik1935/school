@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import javax.validation.Valid;
@@ -50,9 +51,23 @@ public class FacultyController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{colour}")
-    public ResponseEntity<Set<Faculty>> getFacultiesByColour(@PathVariable String colour) {
-        return ResponseEntity.ok(facultyService.getFacultiesByColour(colour));
+    @GetMapping("/getByParams/")
+    public ResponseEntity<Set<Faculty>> getFacultiesByParams(@RequestParam(required = false) String name,
+                                                             @RequestParam(required = false) String colour) {
+        if (!name.isBlank() && colour.isBlank()) {
+            return ResponseEntity.ok(facultyService.getFacultiesByName(name));
+        } else if (name.isBlank() && !colour.isBlank()) {
+            return ResponseEntity.ok(facultyService.getFacultiesByColour(colour));
+        } else if (!name.isBlank() && !colour.isBlank()) {
+            return ResponseEntity.ok(facultyService.getFacultiesByNameAndColour(name, colour));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();   // Наверное, нужно эту ситуацию было через исключение обработать? Подсказать, что нету хотя бы одного параметра.
+        }
+    }
+
+    @GetMapping("/getStudents/")
+    public ResponseEntity<Set<Student>> getStudents(int id) {
+        return ResponseEntity.ok(facultyService.getStudentsByFacultyId(id));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -61,7 +76,7 @@ public class FacultyController {
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ErrorMessage> notFoundElement () {
+    public ResponseEntity<ErrorMessage> notFoundElement() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage("Element not found"));
     }
 }
