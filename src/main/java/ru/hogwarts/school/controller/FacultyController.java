@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import javax.validation.Valid;
@@ -50,9 +51,18 @@ public class FacultyController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{colour}")
-    public ResponseEntity<Set<Faculty>> getFacultiesByColour(@PathVariable String colour) {
-        return ResponseEntity.ok(facultyService.getFacultiesByColour(colour));
+    @GetMapping("/getByParams/")
+    public ResponseEntity<?> getFacultiesByNameOrColour(@RequestParam String nameOrColour) {
+        if(nameOrColour.isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect params");
+        } else {
+            return ResponseEntity.ok(facultyService.getFacultiesByNameOrColour(nameOrColour));
+        }
+    }
+
+    @GetMapping("/{id}/students")
+    public ResponseEntity<Set<Student>> getStudents(@PathVariable int id) {
+        return ResponseEntity.ok(facultyService.getStudentsByFacultyId(id));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -61,7 +71,7 @@ public class FacultyController {
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ErrorMessage> notFoundElement () {
+    public ResponseEntity<ErrorMessage> notFoundElement() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage("Element not found"));
     }
 }
