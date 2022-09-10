@@ -12,7 +12,7 @@ import java.util.Objects;
 public class Student {
 
     @Id
-    @GeneratedValue // А можем ли мы заставить замещать удаленные айдишники, а не продолжать счетчик? Или только вручную?
+    @GeneratedValue
     private long id;
 
     @Pattern(regexp = "^[A-z]+$")
@@ -24,7 +24,7 @@ public class Student {
 
     @ManyToOne
     @JoinColumn(name = "faculty_id")
-    private Faculty faculty; //А как нам его записать не вручную в таблицу, а через метод контроллера? Наличие факультета в конструкторе игнориуется Спрингом.
+    private Faculty faculty;
 
     public Student(long id, String name, int age) {
         this.id = id;

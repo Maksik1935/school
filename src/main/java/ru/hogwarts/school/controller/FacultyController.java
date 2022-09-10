@@ -52,21 +52,16 @@ public class FacultyController {
     }
 
     @GetMapping("/getByParams/")
-    public ResponseEntity<Set<Faculty>> getFacultiesByParams(@RequestParam(required = false) String name,
-                                                             @RequestParam(required = false) String colour) {
-        if (!name.isBlank() && colour.isBlank()) {
-            return ResponseEntity.ok(facultyService.getFacultiesByName(name));
-        } else if (name.isBlank() && !colour.isBlank()) {
-            return ResponseEntity.ok(facultyService.getFacultiesByColour(colour));
-        } else if (!name.isBlank() && !colour.isBlank()) {
-            return ResponseEntity.ok(facultyService.getFacultiesByNameAndColour(name, colour));
+    public ResponseEntity<?> getFacultiesByNameOrColour(@RequestParam String nameOrColour) {
+        if(nameOrColour.isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect params");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();   // Наверное, нужно эту ситуацию было через исключение обработать? Подсказать, что нету хотя бы одного параметра.
+            return ResponseEntity.ok(facultyService.getFacultiesByNameOrColour(nameOrColour));
         }
     }
 
-    @GetMapping("/getStudents/")
-    public ResponseEntity<Set<Student>> getStudents(int id) {
+    @GetMapping("/{id}/students")
+    public ResponseEntity<Set<Student>> getStudents(@PathVariable int id) {
         return ResponseEntity.ok(facultyService.getStudentsByFacultyId(id));
     }
 

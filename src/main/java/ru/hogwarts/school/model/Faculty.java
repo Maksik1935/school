@@ -2,7 +2,6 @@ package ru.hogwarts.school.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 

@@ -37,19 +37,12 @@ public class FacultyService {
         }
     }
 
-    public Set<Faculty> getFacultiesByColour(String colour) {
-        return facultyRepository.findAllByColour(colour);
+    public Set<Faculty> getFacultiesByNameOrColour(String nameOrColour) {
+        return facultyRepository.findAllByNameOrColour(nameOrColour);
     }
 
-    public Set<Faculty> getFacultiesByName(String name) {
-        return facultyRepository.findAllByName(name);
-    }
-
-    public Set<Faculty> getFacultiesByNameAndColour(String name, String colour) {
-        return facultyRepository.findAllByNameAndColour(name, colour);
-    }
 
     public Set<Student> getStudentsByFacultyId(int id) {
-        return facultyRepository.findById(id).orElseThrow().getStudents();
+        return facultyRepository.findAllById(id);
     }
 }
