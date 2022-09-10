@@ -1,9 +1,9 @@
-package ru.hogwarts.school.service;
+package ru.hogwarts.school.services;
 
 import org.springframework.stereotype.Service;
-import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.repository.FacultyRepository;
+import ru.hogwarts.school.models.Faculty;
+import ru.hogwarts.school.models.Student;
+import ru.hogwarts.school.repositories.FacultyRepository;
 
 import java.util.Set;
 
@@ -37,8 +37,8 @@ public class FacultyService {
         }
     }
 
-    public Set<Faculty> getFacultiesByNameOrColour(String nameOrColour) {
-        return facultyRepository.findAllByNameOrColour(nameOrColour);
+    public Set<Faculty> getFacultiesByNameOrColour(String nameOrColour) {  // is correct?
+        return facultyRepository.findAllByNameOrColour(nameOrColour, nameOrColour);
     }
 
 

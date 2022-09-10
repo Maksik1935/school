@@ -1,11 +1,11 @@
-package ru.hogwarts.school.service;
+package ru.hogwarts.school.services;
 
 import org.springframework.stereotype.Service;
-import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.repository.StudentRepository;
+import ru.hogwarts.school.exceptions.IncorrectStudentIdException;
+import ru.hogwarts.school.models.Faculty;
+import ru.hogwarts.school.models.Student;
+import ru.hogwarts.school.repositories.StudentRepository;
 
-import java.sql.Statement;
 import java.util.*;
 
 @Service
@@ -23,7 +23,7 @@ public class StudentService {
 
 
     public Student findStudent(long id) {
-        return studentRepository.findById(id).orElseThrow();
+        return studentRepository.findById(id).orElseThrow(IncorrectStudentIdException::new);
     }
 
     public Student updateStudent(Student student) {

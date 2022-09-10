@@ -1,13 +1,13 @@
-package ru.hogwarts.school.controller;
+package ru.hogwarts.school.controllers;
 
 import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.service.FacultyService;
+import ru.hogwarts.school.models.Faculty;
+import ru.hogwarts.school.models.Student;
+import ru.hogwarts.school.services.FacultyService;
 
 import javax.validation.Valid;
 import java.util.NoSuchElementException;

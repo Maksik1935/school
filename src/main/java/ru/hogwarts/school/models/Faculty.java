@@ -1,4 +1,4 @@
-package ru.hogwarts.school.model;
+package ru.hogwarts.school.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
