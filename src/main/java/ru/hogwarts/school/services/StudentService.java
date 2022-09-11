@@ -1,7 +1,7 @@
 package ru.hogwarts.school.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.hogwarts.school.exceptions.IncorrectStudentIdException;
 import ru.hogwarts.school.models.Faculty;
 import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.repositories.StudentRepository;
@@ -23,20 +23,15 @@ public class StudentService {
 
 
     public Student findStudent(long id) {
-        return studentRepository.findById(id).orElseThrow(IncorrectStudentIdException::new);
+        return studentRepository.findById(id).orElseThrow();
     }
 
     public Student updateStudent(Student student) {
         return studentRepository.save(student);
     }
 
-    public boolean deleteStudent(long id) {
-        if(studentRepository.findById(id).isPresent()) {
-            studentRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
-        }
+    public void deleteStudent(long id) {
+        studentRepository.delete(findStudent(id));
     }
 
     public Set<Student> getStudentDyAge(int min, int max) {
@@ -48,6 +43,6 @@ public class StudentService {
     }
 
     public Faculty getStudentsFaculty(long id) {
-        return studentRepository.findById(id).orElse(null).getFaculty();
+        return studentRepository.findById(id).orElseThrow().getFaculty();
     }
 }

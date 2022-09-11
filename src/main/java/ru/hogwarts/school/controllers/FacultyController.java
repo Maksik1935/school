@@ -10,50 +10,52 @@ import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.services.FacultyService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/faculty")
 public class FacultyController {
+
     private final FacultyService facultyService;
 
     public FacultyController(FacultyService facultyService) {
         this.facultyService = facultyService;
     }
 
+
     @PostMapping
-    public ResponseEntity<Faculty> createStudent(@Valid @RequestBody Faculty faculty) {
+    public ResponseEntity<Faculty> createFaculty(@Valid @RequestBody Faculty faculty) {
         Faculty createdFaculty = facultyService.addFaculty(faculty);
         return ResponseEntity.ok(createdFaculty);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Faculty> findStudent(@PathVariable int id) {
-        Faculty faculty = facultyService.findFaculty(id);
-        if (faculty == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(faculty);
+    public ResponseEntity<Faculty> findFaculty(@PathVariable int id) {
+        return ResponseEntity.ok(facultyService.findFaculty(id));
     }
 
     @PutMapping
-    public ResponseEntity<Faculty> updateStudent(@Valid @RequestBody Faculty faculty) {
+    public ResponseEntity<Faculty> updateFaculty(@Valid @RequestBody Faculty faculty) {
         Faculty updatedFaculty = facultyService.updateFaculty(faculty);
         return ResponseEntity.ok(updatedFaculty);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Faculty> deleteStudent(@PathVariable int id) {
-        if (!facultyService.deleteFaculty(id)) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<?> deleteFaculty(@PathVariable int id) {
+        facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/getAll/")
+    public List<Faculty> getAll() {
+        return facultyService.getAll();
     }
 
     @GetMapping("/getByParams/")
     public ResponseEntity<?> getFacultiesByNameOrColour(@RequestParam String nameOrColour) {
-        if(nameOrColour.isBlank()) {
+        if (nameOrColour.isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect params");
         } else {
             return ResponseEntity.ok(facultyService.getFacultiesByNameOrColour(nameOrColour));

@@ -56,7 +56,7 @@ public class AvatarService {
     }
 
     public Avatar findAvatar(long id) {
-        return avatarRepository.findByStudentId(id).orElse(null); //как грамотнее?
+        return avatarRepository.findByStudentId(id).orElseThrow();
     }
 
 }

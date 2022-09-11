@@ -21,15 +21,6 @@ public class Faculty {
     @OneToMany(mappedBy = "faculty")
     private Set<Student> students;
 
-    public Faculty(int id, String name, String colour) {
-        this.id = id;
-        this.name = name;
-        this.colour = colour;
-    }
-
-    public Faculty() {
-
-    }
 
     public int getId() {
         return id;

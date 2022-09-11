@@ -5,6 +5,7 @@ import ru.hogwarts.school.models.Faculty;
 import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.repositories.FacultyRepository;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -28,13 +29,12 @@ public class FacultyService {
         return facultyRepository.save(faculty);
     }
 
-    public boolean deleteFaculty(int id) {
-        if (facultyRepository.findById(id).isPresent()) {
-            facultyRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
-        }
+    public void deleteFaculty(int id) {
+        facultyRepository.delete(findFaculty(id));
+    }
+
+    public List<Faculty> getAll() {
+        return facultyRepository.findAll();
     }
 
     public Set<Faculty> getFacultiesByNameOrColour(String nameOrColour) {  // is correct?

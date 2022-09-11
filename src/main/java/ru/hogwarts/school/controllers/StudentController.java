@@ -9,13 +9,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.models.Avatar;
-import ru.hogwarts.school.models.Faculty;
 import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.services.AvatarService;
 import ru.hogwarts.school.services.StudentService;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -47,11 +44,7 @@ public class StudentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Student> findStudent(@PathVariable long id) {
-        Student student = studentService.findStudent(id);
-        if (student == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(student);
+        return ResponseEntity.ok(studentService.findStudent(id));
     }
 
     @PutMapping
@@ -61,10 +54,8 @@ public class StudentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Student> deleteStudent(@PathVariable long id) {
-        if(!studentService.deleteStudent(id)) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<?> deleteStudent(@PathVariable long id) {
+        studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
     }
 
@@ -79,9 +70,9 @@ public class StudentController {
     }
 
     @GetMapping("/{id}/faculty/")
-    public ResponseEntity<Faculty> getStudentFaculty(@PathVariable long id) {
+    public ResponseEntity<?> getStudentFaculty(@PathVariable long id) {
         if(studentService.getStudentsFaculty(id) == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Faculty was not found");
         }
         return ResponseEntity.ok(studentService.getStudentsFaculty(id));
     }
