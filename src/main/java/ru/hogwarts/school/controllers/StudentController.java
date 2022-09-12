@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hogwarts.school.exceptions.StudentNotFoundException;
 import ru.hogwarts.school.models.Avatar;
 import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.services.AvatarService;
@@ -21,7 +22,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 @RestController
@@ -118,9 +118,9 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Incorrect student params"));
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
+    @ExceptionHandler(StudentNotFoundException.class)
     public ResponseEntity<ErrorMessage> elementNotFound () {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage("Element not Found"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage("Student not Found"));
     }
 
 }

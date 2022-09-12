@@ -10,6 +10,6 @@ import java.util.Set;
 @Repository
 public interface FacultyRepository extends JpaRepository<Faculty, Integer> {
 
-    Set<Faculty> findAllByNameOrColour(String name, String colour);
+    Set<Faculty> findAllByNameOrColourIgnoreCase(String name, String colour);
     Set<Student> findAllById(long id);
 }

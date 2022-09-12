@@ -2,6 +2,7 @@ package ru.hogwarts.school.controllers;
 
 import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,7 +18,6 @@ import ru.hogwarts.school.services.FacultyService;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -53,12 +53,15 @@ class FacultyControllerTest {
         facultyObject.put("colour", colour);
     }
 
+    @BeforeEach
+    public void initBeforeEach(){
+        when(facultyRepository.save(faculty)).thenReturn(faculty);
+        when(facultyRepository.findById(id)).thenReturn(Optional.of(faculty));
+        when(facultyRepository.findAll()).thenReturn(new ArrayList<>(List.of(faculty)));
+    }
     @Test
     public void createTest() throws Exception {
-
-        when(facultyRepository.save(faculty)).thenReturn(faculty); // как это можно было засунуть в init? он же статик должен быть
-
-        mockMvc.perform(MockMvcRequestBuilders
+         mockMvc.perform(MockMvcRequestBuilders
                         .post("/faculty")
                         .content(facultyObject.toString())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -72,7 +75,6 @@ class FacultyControllerTest {
 
     @Test
     public void findTest() throws Exception {
-        when(facultyRepository.findById(id)).thenReturn(Optional.of(faculty));
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/faculty/" + id)
                 .accept(MediaType.APPLICATION_JSON))
@@ -84,7 +86,6 @@ class FacultyControllerTest {
 
     @Test
     public void deleteTest() throws Exception {
-        when(facultyRepository.findById(id)).thenReturn(Optional.of(faculty));
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/faculty/" + id)
                 .content(facultyObject.toString())
@@ -94,7 +95,6 @@ class FacultyControllerTest {
 
     @Test
     public void getAllTest() throws Exception {
-        when(facultyRepository.findAll()).thenReturn(new ArrayList<>(List.of(faculty)));
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/faculty/getAll/")
                         .accept(MediaType.APPLICATION_JSON))
@@ -106,7 +106,7 @@ class FacultyControllerTest {
 
     @Test
     public void getByParamsTest() throws Exception {
-        when(facultyRepository.findAllByNameOrColour(name, name)).thenReturn(new HashSet<>(Set.of(faculty)));
+        when(facultyRepository.findAllByNameOrColourIgnoreCase(name, name)).thenReturn(new HashSet<>(Set.of(faculty)));
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/faculty/getByParams/?nameOrColour=" + name)
                 .accept(MediaType.APPLICATION_JSON))

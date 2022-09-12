@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.exceptions.FacultyNotFoundException;
 import ru.hogwarts.school.models.Faculty;
 import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.services.FacultyService;
@@ -72,7 +73,7 @@ public class FacultyController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Incorrect faculty params"));
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
+    @ExceptionHandler(FacultyNotFoundException.class)
     public ResponseEntity<ErrorMessage> notFoundElement() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage("Element not found"));
     }
