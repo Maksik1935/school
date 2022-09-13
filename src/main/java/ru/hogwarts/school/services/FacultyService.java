@@ -39,7 +39,7 @@ public class FacultyService {
     }
 
     public Set<Faculty> getFacultiesByNameOrColour(String nameOrColour) {
-        return facultyRepository.findAllByNameOrColourIgnoreCase(nameOrColour, nameOrColour);
+        return facultyRepository.findAllByNameIgnoreCaseOrColourIgnoreCase(nameOrColour, nameOrColour);
     }
 
 

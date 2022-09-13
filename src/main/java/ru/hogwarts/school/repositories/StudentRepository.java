@@ -1,5 +1,6 @@
 package ru.hogwarts.school.repositories;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -13,7 +14,6 @@ import java.util.Set;
 @Repository
 public interface StudentRepository extends PagingAndSortingRepository<Student, Long> {
     Set<Student> findByAgeBetween(int min, int max);
-    List<Student> findAll(Pageable pageable);
     @Query(value = "SELECT COUNT(*) FROM student", nativeQuery = true)
     long getStudentsAmount();
     @Query(value = "SELECT AVG (age) FROM student", nativeQuery = true)

@@ -1,7 +1,7 @@
 package ru.hogwarts.school.controllers;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springdoc.api.ErrorMessage;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,10 +15,8 @@ import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.services.AvatarService;
 import ru.hogwarts.school.services.StudentService;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.awt.print.Pageable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -99,7 +97,7 @@ public class StudentController {
         }
     }
 
-    @GetMapping("{id}/avatar/getFromFile/") // не надо ли всю эту ботву в сервис засунуть?
+    @GetMapping("{id}/avatar/getFromFile/")
     public ResponseEntity<?> getAvatarFromFile(@PathVariable long id, HttpServletResponse response) throws IOException {
         Avatar avatar = avatarService.findAvatar(id);
         if (avatar == null) {
@@ -114,6 +112,23 @@ public class StudentController {
             is.transferTo(os);
         }
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/avatar/get-all")
+    public ResponseEntity<?> getAllAvatars(@RequestParam int page, @RequestParam int size) {
+        List<Avatar> avatarList = avatarService.getAllAvatars(page, size);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(avatarList.get(0).getMediaType()));
+        int length = 0;
+        for(Avatar a : avatarList) {
+            length = length + a.getData().length;
+        }
+        headers.setContentLength(length);
+        byte[] data = new byte[length];
+        for(Avatar a : avatarList) {
+            data = ArrayUtils.addAll(data, a.getData());
+        }
+        return ResponseEntity.ok().headers(headers).body(data);
     }
 
     @GetMapping("/amount/")
