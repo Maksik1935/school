@@ -1,6 +1,7 @@
 package ru.hogwarts.school.controllers;
 
 import org.springdoc.api.ErrorMessage;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,8 +15,10 @@ import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.services.AvatarService;
 import ru.hogwarts.school.services.StudentService;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.awt.print.Pageable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -60,8 +63,8 @@ public class StudentController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<Student>> getAll() {
-        return ResponseEntity.ok(studentService.getAllStudents());
+    public ResponseEntity<List<Student>> getAll(@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(studentService.getAllStudents(page, size));
     }
 
     @GetMapping("/getByAge/")
@@ -111,6 +114,21 @@ public class StudentController {
             is.transferTo(os);
         }
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/amount/")
+    public ResponseEntity<Long> getStudentsAmount() {
+        return ResponseEntity.ok(studentService.getStudentsAmount());
+    }
+
+    @GetMapping("/avg-age")
+    public ResponseEntity<Integer> getAverageAge() {
+        return ResponseEntity.ok(studentService.getAverageAge());
+    }
+
+    @GetMapping("/last-five")
+    public ResponseEntity<List<Student>> getLastFiveStudents() {
+        return ResponseEntity.ok(studentService.getLastFiveStudents());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
