@@ -18,7 +18,7 @@ public class Student {
     @Pattern(regexp = "^[A-z]+$")
     private String name;
 
-    @Min(value = 10)
+    @Min(value = 16)
     @Max(value = 25)
     private int age;
 
