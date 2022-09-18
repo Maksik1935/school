@@ -8,7 +8,7 @@ import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-public interface AvatarRepository extends PagingAndSortingRepository<Avatar, Integer> {
+public interface AvatarRepository extends JpaRepository<Avatar, Integer> {
 
     Optional<Avatar> findByStudentId(long id);
 

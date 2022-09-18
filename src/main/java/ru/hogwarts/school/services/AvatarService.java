@@ -5,11 +5,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hogwarts.school.exceptions.AvatarNorFoundException;
 import ru.hogwarts.school.models.Avatar;
 import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.repositories.AvatarRepository;
 
-import java.awt.print.Pageable;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -59,7 +59,7 @@ public class AvatarService {
     }
 
     public Avatar findAvatar(long id) {
-        return avatarRepository.findByStudentId(id).orElseThrow();
+        return avatarRepository.findByStudentId(id).orElseThrow(AvatarNorFoundException::new);
     }
 
     public List<Avatar> getAllAvatars(int page, int size) {

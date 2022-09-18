@@ -1,4 +1,4 @@
-ALTER TABLE student AFF CONSTRAINT age CHECK (age > 16)
+ALTER TABLE student ADD CONSTRAINT age CHECK (age > 16)
 ALTER TABLE student ADD CONSTRAINT name UNIQUE (name)
 ALTER TABLE student ALTER COLUMN name SET not null
 ALTER TABLE faculty ADD CONSTRAINT name_color_unique UNIQUE (name, colour)

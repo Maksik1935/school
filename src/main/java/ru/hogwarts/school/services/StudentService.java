@@ -1,7 +1,5 @@
 package ru.hogwarts.school.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exceptions.StudentNotFoundException;
 import ru.hogwarts.school.models.Faculty;
@@ -40,9 +38,8 @@ public class StudentService {
         return studentRepository.findByAgeBetween(min, max);
     }
 
-    public List<Student> getAllStudents(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page-1, size);
-        return studentRepository.findAll(pageRequest).getContent();
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
     }
 
     public Faculty getStudentsFaculty(long id) {

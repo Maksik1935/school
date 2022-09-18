@@ -3,7 +3,6 @@ package ru.hogwarts.school.models;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 public class Faculty {
@@ -18,8 +17,6 @@ public class Faculty {
     @Pattern(regexp = "^[A-z]+$")
     private String colour;
 
-    @OneToMany(mappedBy = "faculty")
-    private Set<Student> students;
 
 
     public int getId() {
@@ -39,10 +36,6 @@ public class Faculty {
     }
     public void setColour(String colour) {
         this.colour = colour;
-    }
-
-    public Set<Student> getStudents() {
-        return students;
     }
 
 

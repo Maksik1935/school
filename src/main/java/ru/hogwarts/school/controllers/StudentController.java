@@ -1,6 +1,5 @@
 package ru.hogwarts.school.controllers;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -9,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hogwarts.school.exceptions.AvatarNorFoundException;
 import ru.hogwarts.school.exceptions.StudentNotFoundException;
 import ru.hogwarts.school.models.Avatar;
 import ru.hogwarts.school.models.Student;
@@ -61,8 +61,8 @@ public class StudentController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<Student>> getAll(@RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(studentService.getAllStudents(page, size));
+    public ResponseEntity<List<Student>> getAll() {
+        return ResponseEntity.ok(studentService.getAllStudents());
     }
 
     @GetMapping("/getByAge/")
@@ -87,22 +87,15 @@ public class StudentController {
     @GetMapping("{id}/avatar/getFromDb")
     public ResponseEntity<?> getAvatarFromDb(@PathVariable long id) {
         Avatar avatar = avatarService.findAvatar(id);
-        if (avatar == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Avatar not found");
-        } else {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.parseMediaType(avatar.getMediaType()));
-            headers.setContentLength(avatar.getData().length);
-            return ResponseEntity.ok().headers(headers).body(avatar.getData());
-        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(avatar.getMediaType()));
+        headers.setContentLength(avatar.getData().length);
+        return ResponseEntity.ok().headers(headers).body(avatar.getData());
     }
 
     @GetMapping("{id}/avatar/getFromFile/")
     public ResponseEntity<?> getAvatarFromFile(@PathVariable long id, HttpServletResponse response) throws IOException {
         Avatar avatar = avatarService.findAvatar(id);
-        if (avatar == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Avatar not found");
-        }
         Path path = Path.of(avatar.getFilePath());
         try (InputStream is = Files.newInputStream(path);
              OutputStream os = response.getOutputStream()) {
@@ -116,19 +109,7 @@ public class StudentController {
 
     @GetMapping("/avatar/get-all")
     public ResponseEntity<?> getAllAvatars(@RequestParam int page, @RequestParam int size) {
-        List<Avatar> avatarList = avatarService.getAllAvatars(page, size);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(avatarList.get(0).getMediaType()));
-        int length = 0;
-        for(Avatar a : avatarList) {
-            length = length + a.getData().length;
-        }
-        headers.setContentLength(length);
-        byte[] data = new byte[length];
-        for(Avatar a : avatarList) {
-            data = ArrayUtils.addAll(data, a.getData());
-        }
-        return ResponseEntity.ok().headers(headers).body(data);
+        return ResponseEntity.ok(avatarService.getAllAvatars(page, size));
     }
 
     @GetMapping("/amount/")
@@ -150,9 +131,13 @@ public class StudentController {
     public ResponseEntity<ErrorMessage> invalidValid() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Incorrect student params"));
     }
+    @ExceptionHandler(AvatarNorFoundException.class)
+    public ResponseEntity<ErrorMessage> avatarNotFound() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Avatar not found"));
+    }
 
     @ExceptionHandler(StudentNotFoundException.class)
-    public ResponseEntity<ErrorMessage> elementNotFound () {
+    public ResponseEntity<ErrorMessage> studentNotFound () {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage("Student not Found"));
     }
 
