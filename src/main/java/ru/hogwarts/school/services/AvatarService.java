@@ -1,5 +1,7 @@
 package ru.hogwarts.school.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ public class AvatarService {
 
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
+
+    Logger logger = LoggerFactory.getLogger(AvatarService.class);
 
     private final StudentService studentService;
     private final AvatarRepository avatarRepository;
@@ -52,6 +56,7 @@ public class AvatarService {
         avatar.setData(avatarFile.getBytes());
 
         avatarRepository.save(avatar);
+        logger.info("Invoked UploadAvatar");
     }
 
     private String getFileExtension(String fileName) {
@@ -59,10 +64,12 @@ public class AvatarService {
     }
 
     public Avatar findAvatar(long id) {
+        logger.info("Invoked FindAvatar");
         return avatarRepository.findByStudentId(id).orElseThrow(AvatarNorFoundException::new);
     }
 
     public List<Avatar> getAllAvatars(int page, int size) {
+        logger.info("Invoked GetAllAvatar");
         PageRequest pageRequest = PageRequest.of(page-1, size);
         return avatarRepository.findAll(pageRequest).getContent();
     }

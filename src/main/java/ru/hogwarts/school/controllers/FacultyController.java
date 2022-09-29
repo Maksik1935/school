@@ -1,5 +1,7 @@
 package ru.hogwarts.school.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ import java.util.Set;
 public class FacultyController {
 
     private final FacultyService facultyService;
+
+    Logger logger = LoggerFactory.getLogger(FacultyController.class);
 
     public FacultyController(FacultyService facultyService) {
         this.facultyService = facultyService;
@@ -70,11 +74,13 @@ public class FacultyController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> invalidValid() {
+        logger.warn("Incorrect faculty params");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Incorrect faculty params"));
     }
 
     @ExceptionHandler(FacultyNotFoundException.class)
     public ResponseEntity<ErrorMessage> notFoundElement() {
+        logger.warn("Element not found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage("Element not found"));
     }
 }

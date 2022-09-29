@@ -1,5 +1,7 @@
 package ru.hogwarts.school.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,8 @@ public class StudentController {
 
     private final StudentService studentService;
     private final AvatarService avatarService;
+
+    Logger logger = LoggerFactory.getLogger(StudentController.class);
 
     public StudentController(StudentService studentService, AvatarService avatarService) {
         this.studentService = studentService;
@@ -129,15 +133,18 @@ public class StudentController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> invalidValid() {
+        logger.warn("Incorrect student params");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Incorrect student params"));
     }
     @ExceptionHandler(AvatarNorFoundException.class)
     public ResponseEntity<ErrorMessage> avatarNotFound() {
+        logger.warn("Avatar not found");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Avatar not found"));
     }
 
     @ExceptionHandler(StudentNotFoundException.class)
     public ResponseEntity<ErrorMessage> studentNotFound () {
+        logger.warn("Student not found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage("Student not Found"));
     }
 
