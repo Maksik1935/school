@@ -131,6 +131,11 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getLastFiveStudents());
     }
 
+    @GetMapping("/get-all-starts-by-a")
+    public ResponseEntity<List<String>> getAllWithNameStartsByA () {
+        return ResponseEntity.ok(studentService.getAllWithNameStartsByA());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> invalidValid() {
         logger.warn("Incorrect student params");
