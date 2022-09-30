@@ -23,7 +23,7 @@ public class FacultyController {
 
     private final FacultyService facultyService;
 
-    Logger logger = LoggerFactory.getLogger(FacultyController.class);
+    private final Logger logger = LoggerFactory.getLogger(FacultyController.class);
 
     public FacultyController(FacultyService facultyService) {
         this.facultyService = facultyService;
