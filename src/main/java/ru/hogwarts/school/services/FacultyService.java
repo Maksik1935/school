@@ -47,6 +47,7 @@ public class FacultyService {
         return facultyRepository.findAll();
     }
 
+
     public Set<Faculty> getFacultiesByNameOrColour(String nameOrColour) {
         logger.info("Invoked FindAllByNameOrColour");
         return facultyRepository.findAllByNameIgnoreCaseOrColourIgnoreCase(nameOrColour, nameOrColour);

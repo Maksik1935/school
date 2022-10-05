@@ -17,12 +17,4 @@ public class LogController {
     public int getServerPort() {
         return server.getWebServer().getPort();
     }
-
-    @GetMapping()
-    public int getInt() {
-        return Stream.iterate(1, a -> a +1)
-                .parallel() //Это же так работает?)
-                .limit(1_000_000)
-                .reduce(0, (a, b) -> a + b );
-    }
 }

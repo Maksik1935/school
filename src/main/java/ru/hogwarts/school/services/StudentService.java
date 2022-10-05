@@ -73,4 +73,39 @@ public class StudentService {
                 .sorted()
                 .collect(Collectors.toList());
     }
+
+    public void printAll() {
+        List<Student> list = getAllStudents();
+        System.out.println(list.get(0).getName());
+        System.out.println(list.get(1).getName());
+
+        new Thread(() -> {
+            System.out.println(list.get(2).getName());
+            System.out.println(list.get(3).getName());
+        }).start();
+
+        new Thread(() -> {
+            System.out.println(list.get(4).getName());
+            System.out.println(list.get(5).getName());
+        }).start();
+    }
+
+    public void printAllSync() {
+        getStudent(0);
+        getStudent(1);
+
+        new Thread(() -> {
+            getStudent(2);
+            getStudent(3);
+        }).start();
+
+        new Thread(() -> {
+            getStudent(4);
+            getStudent(5);
+        }).start();
+    }
+
+    public synchronized void getStudent(int index) {
+        System.out.println(getAllStudents().get(index).getName());
+    }
 }
