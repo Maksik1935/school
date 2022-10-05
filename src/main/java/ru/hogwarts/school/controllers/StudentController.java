@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -129,6 +130,21 @@ public class StudentController {
     @GetMapping("/last-five")
     public ResponseEntity<List<Student>> getLastFiveStudents() {
         return ResponseEntity.ok(studentService.getLastFiveStudents());
+    }
+
+    @GetMapping("/get-all-starts-by-a")
+    public ResponseEntity<List<String>> getAllWithNameStartsByA () {
+        return ResponseEntity.ok(studentService.getAllWithNameStartsByA());
+    }
+
+    @GetMapping("/print-all")
+    public void printAll() {
+        studentService.printAll();
+    }
+
+    @GetMapping("/print-all-sync")
+    public void printAllSync() {
+        studentService.printAllSync();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

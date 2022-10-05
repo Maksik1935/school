@@ -8,6 +8,7 @@ import ru.hogwarts.school.models.Faculty;
 import ru.hogwarts.school.models.Student;
 import ru.hogwarts.school.repositories.FacultyRepository;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -46,6 +47,7 @@ public class FacultyService {
         return facultyRepository.findAll();
     }
 
+
     public Set<Faculty> getFacultiesByNameOrColour(String nameOrColour) {
         logger.info("Invoked FindAllByNameOrColour");
         return facultyRepository.findAllByNameIgnoreCaseOrColourIgnoreCase(nameOrColour, nameOrColour);
@@ -55,5 +57,11 @@ public class FacultyService {
     public Set<Student> getStudentsByFacultyId(int id) {
         logger.info("Invoked findAllById");
         return facultyRepository.findAllById(id);
+    }
+
+    public String getFacultyWithLongerName() {
+        return getAll().stream()     // А как вообще сюда выброс исключения засунуть?)
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length)).get();
     }
 }

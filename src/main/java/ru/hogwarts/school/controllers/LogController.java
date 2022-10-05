@@ -5,6 +5,8 @@ import org.springframework.boot.web.servlet.context.ServletWebServerApplicationC
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.stream.Stream;
+
 @RestController
 public class LogController {
 

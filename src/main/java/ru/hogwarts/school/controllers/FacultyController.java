@@ -72,6 +72,11 @@ public class FacultyController {
         return ResponseEntity.ok(facultyService.getStudentsByFacultyId(id));
     }
 
+    @GetMapping("/get-longer-name")
+    public ResponseEntity<String> getFacultyWithLongerName () {
+        return ResponseEntity.ok(facultyService.getFacultyWithLongerName());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> invalidValid() {
         logger.warn("Incorrect faculty params");
