@@ -91,21 +91,19 @@ public class StudentService {
     }
 
     public void printAllSync() {
-        getStudent(0);
-        getStudent(1);
+        getStudent(getAllStudents().get(0), getAllStudents().get(1));
 
         new Thread(() -> {
-            getStudent(2);
-            getStudent(3);
+            getStudent(getAllStudents().get(2), getAllStudents().get(3));
         }).start();
 
         new Thread(() -> {
-            getStudent(4);
-            getStudent(5);
+            getStudent(getAllStudents().get(4), getAllStudents().get(5));
         }).start();
     }
 
-    public synchronized void getStudent(int index) {
-        System.out.println(getAllStudents().get(index).getName());
+    public synchronized void getStudent(Student student1, Student student2) {
+        System.out.println(student1.getName());
+        System.out.println(student2.getName());
     }
 }
